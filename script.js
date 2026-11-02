@@ -1,34 +1,6 @@
 
-const skills = [
-    {
-        title: "Python Tutoring",
-        category: "Programming",
-        description: "Learn Python fundamentals and programming concepts.",
-        price: 20,
-        provider: "Alex"
-    },
-    {
-        title: "Guitar Lessons",
-        category: "Music",
-        description: "Learn guitar basics, chords, and popular songs.",
-        price: 15,
-        provider: "Jordan"
-    },
-    {
-        title: "Resume Review",
-        category: "Career",
-        description: "Get feedback and advice to improve your resume.",
-        price: 0,
-        provider: "Taylor"
-    },
-    {
-        title: "Web Development",
-        category: "Programming",
-        description: "Learn HTML, CSS, and JavaScript basics.",
-        price: 25,
-        provider: "Morgan"
-    }
-];
+// Skills are loaded from the API instead of hardcoded data
+let skills = [];
 
 // Filter skills by category
 function filterSkillsByCategory(skills, category) {
@@ -54,7 +26,7 @@ function matchSkillsToUser(userNeeds, skills) {
 
 // Browser functionality
 if (typeof document !== 'undefined') {
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
         const exploreButton = document.getElementById("exploreButton");
         const skillsContainer = document.getElementById("skills-container");
         const filterButtons = document.querySelectorAll(".filter-btn");
@@ -72,13 +44,18 @@ if (typeof document !== 'undefined') {
 
             const filteredSkills = filterSkillsByCategory(skills, category);
 
+            if (filteredSkills.length === 0) {
+                skillsContainer.innerHTML = '<p>No skills found.</p>';
+                return;
+            }
+
             skillsContainer.innerHTML = filteredSkills.map(skill => `
                 <div class="skill-card">
                     <h3>${skill.title}</h3>
                     <p>${skill.description}</p>
                     <p><strong>Category:</strong> ${skill.category}</p>
-                    <p><strong>Price:</strong> $${skill.price}</p>
-                    <p><strong>Provider:</strong> ${skill.provider}</p>
+                    <p><strong>Price:</strong> $${Number(skill.price).toFixed(2)}</p>
+                    <p><strong>Provider:</strong> ${skill.provider || 'Not specified'}</p>
                 </div>
             `).join('');
         }
@@ -95,8 +72,26 @@ if (typeof document !== 'undefined') {
             });
         });
 
-        // Display all skills initially
-        displaySkills('All');
+        // Load skills from the API
+        async function loadSkills() {
+            if (skillsContainer) {
+                skillsContainer.innerHTML = '<p>Loading skills...</p>';
+            }
+
+            try {
+                skills = await window.fetchSkills();
+                displaySkills('All');
+            } catch (error) {
+                console.error('Error loading skills:', error);
+
+                if (skillsContainer) {
+                    skillsContainer.innerHTML =
+                        '<p>Unable to load skills. Please try again later.</p>';
+                }
+            }
+        }
+
+        await loadSkills();
 
         // Cost calculator
         const calculateButton = document.getElementById("calculate-button");
@@ -117,7 +112,8 @@ if (typeof document !== 'undefined') {
                     hourlyRate < 0 ||
                     hours < 0
                 ) {
-                    calculationResult.innerHTML = '<h3>Please enter valid, non-negative numbers.</h3>';
+                    calculationResult.innerHTML =
+                        '<h3>Please enter valid, non-negative numbers.</h3>';
                     return;
                 }
 
@@ -145,7 +141,8 @@ if (typeof document !== 'undefined') {
                     !Number.isFinite(maxPrice) ||
                     maxPrice < 0
                 ) {
-                    matchResults.innerHTML = '<p>Please enter a valid maximum price of $0 or more.</p>';
+                    matchResults.innerHTML =
+                        '<p>Please enter a valid maximum price of $0 or more.</p>';
                     return;
                 }
 
@@ -157,7 +154,8 @@ if (typeof document !== 'undefined') {
                 const matchedSkills = matchSkillsToUser(userNeeds, skills);
 
                 if (matchedSkills.length === 0) {
-                    matchResults.innerHTML = '<p>No skills match your category and budget.</p>';
+                    matchResults.innerHTML =
+                        '<p>No skills match your category and budget.</p>';
                     return;
                 }
 
@@ -166,10 +164,59 @@ if (typeof document !== 'undefined') {
                         <h3>${skill.title}</h3>
                         <p>${skill.description}</p>
                         <p><strong>Category:</strong> ${skill.category}</p>
-                        <p><strong>Price:</strong> $${skill.price.toFixed(2)}</p>
-                        <p><strong>Provider:</strong> ${skill.provider}</p>
+                        <p><strong>Price:</strong> $${Number(skill.price).toFixed(2)}</p>
+                        <p><strong>Provider:</strong> ${skill.provider || 'Not specified'}</p>
                     </div>
                 `).join('');
+            });
+        }
+
+        // Create Skill Form
+        const createSkillForm = document.getElementById("create-skill-form");
+        const createSkillMessage = document.getElementById("create-skill-message");
+
+        if (createSkillForm && createSkillMessage) {
+            createSkillForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const priceInput = document.getElementById("skill-price");
+
+                const newSkill = {
+                    title: document.getElementById("skill-title").value.trim(),
+                    category: document.getElementById("skill-category").value,
+                    price: Number(priceInput.value),
+                    description: document.getElementById("skill-description").value.trim()
+                };
+
+                if (
+                    !newSkill.title ||
+                    !newSkill.category ||
+                    !newSkill.description ||
+                    priceInput.value.trim() === '' ||
+                    !Number.isFinite(newSkill.price) ||
+                    newSkill.price < 0
+                ) {
+                    createSkillMessage.textContent =
+                        "Please complete all fields with valid information.";
+                    return;
+                }
+
+                try {
+                    await window.createSkill(newSkill);
+
+                    createSkillMessage.textContent =
+                        "Skill created successfully!";
+
+                    createSkillForm.reset();
+
+                    await loadSkills();
+
+                } catch (error) {
+                    console.error("Error creating skill:", error);
+
+                    createSkillMessage.textContent =
+                        "Unable to create skill. Please try again.";
+                }
             });
         }
     });
