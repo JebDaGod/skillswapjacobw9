@@ -179,3 +179,43 @@ footer {
     gap: 20px;
     margin-top: 25px;
 }
+#create-skill-section {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+#create-skill-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 400px;
+    margin: 20px auto;
+    text-align: left;
+}
+
+#create-skill-form input,
+#create-skill-form select,
+#create-skill-form textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: inherit;
+}
+
+#create-skill-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+#create-skill-form button {
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#create-skill-message {
+    margin-top: 15px;
+}

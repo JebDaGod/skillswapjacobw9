@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skill Swap</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="api-service.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 
@@ -72,31 +74,80 @@
         </section>
 
         <section id="match-section">
-    <h2>Find My Match</h2>
-    <p>Choose a category and maximum price to find skills that fit your needs.</p>
+            <h2>Find My Match</h2>
+            <p>Choose a category and maximum price to find skills that fit your needs.</p>
 
-    <div class="match-form">
-        <label for="match-category">Category Preference:</label>
-        <select id="match-category">
-            <option value="Programming">Programming</option>
-            <option value="Music">Music</option>
-            <option value="Career">Career</option>
-        </select>
+            <div class="match-form">
+                <label for="match-category">Category Preference:</label>
+                <select id="match-category">
+                    <option value="Programming">Programming</option>
+                    <option value="Music">Music</option>
+                    <option value="Career">Career</option>
+                </select>
 
-        <label for="match-max-price">Maximum Price ($):</label>
-        <input
-            type="number"
-            id="match-max-price"
-            min="0"
-            step="0.01"
-            placeholder="Enter your budget"
-        >
+                <label for="match-max-price">Maximum Price ($):</label>
+                <input
+                    type="number"
+                    id="match-max-price"
+                    min="0"
+                    step="0.01"
+                    placeholder="Enter your budget"
+                >
 
-        <button id="find-match-button" type="button">Find My Match</button>
-    </div>
+                <button id="find-match-button" type="button">Find My Match</button>
+            </div>
 
-    <div id="match-results" aria-live="polite"></div>
-</section>
+            <div id="match-results" aria-live="polite"></div>
+        </section>
+
+        <!-- Create Skill Form -->
+        <section id="create-skill-section">
+            <h2>Offer a Skill</h2>
+            <p>Share your knowledge by creating a new skill listing.</p>
+
+            <form id="create-skill-form">
+                <label for="skill-title">Skill Title:</label>
+                <input
+                    type="text"
+                    id="skill-title"
+                    name="title"
+                    placeholder="Enter skill title"
+                    required
+                >
+
+                <label for="skill-category">Category:</label>
+                <select id="skill-category" name="category" required>
+                    <option value="">Select a category</option>
+                    <option value="Programming">Programming</option>
+                    <option value="Music">Music</option>
+                    <option value="Career">Career</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="skill-price">Price ($):</label>
+                <input
+                    type="number"
+                    id="skill-price"
+                    name="price"
+                    min="0"
+                    step="0.01"
+                    placeholder="Enter price"
+                    required
+                >
+
+                <label for="skill-description">Description:</label>
+                <textarea
+                    id="skill-description"
+                    name="description"
+                    placeholder="Describe the skill you are offering"
+                    required
+                ></textarea>
+
+                <button type="submit">Create Skill</button>
+            </form>
+
+            <div id="create-skill-message" aria-live="polite"></div>
+        </section>
     </main>
 
     <footer>
