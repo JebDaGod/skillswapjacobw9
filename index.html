@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Swap</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <h1>Skill Swap</h1>
+        <p>Learn new skills by sharing what you know.</p>
+    </header>
+
+    <main>
+        <section id="about">
+            <h2>About Skill Swap</h2>
+            <p>
+                Skill Swap connects students and recent graduates
+                who want to exchange skills, share knowledge, and
+                help each other succeed.
+            </p>
+        </section>
+
+        <section id="skills-section">
+            <h2>Explore Skills</h2>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-category="All">All</button>
+                <button class="filter-btn" data-category="Programming">Programming</button>
+                <button class="filter-btn" data-category="Music">Music</button>
+                <button class="filter-btn" data-category="Career">Career</button>
+            </div>
+
+            <div id="skills-container" class="skills-container">
+                <!-- Skill cards will be displayed here -->
+            </div>
+        </section>
+
+        <section id="skills">
+            <h2>Explore Skills</h2>
+            <p>Discover skills you can learn or teach.</p>
+            <button id="exploreButton">Explore Skills</button>
+        </section>
+
+        <section id="cost-calculator">
+            <h2>Skill Session Cost Calculator</h2>
+            <p>Calculate the total cost of a skill session.</p>
+
+            <div class="calculator-form">
+                <div>
+                    <label for="hourly-rate">Hourly Rate ($)</label>
+                    <input type="number" id="hourly-rate" min="0" step="0.01" placeholder="Enter hourly rate">
+                </div>
+
+                <div>
+                    <label for="hours">Hours Requested</label>
+                    <input type="number" id="hours" min="0" step="0.5" placeholder="Enter hours">
+                </div>
+
+                <button type="button" id="calculate-button">
+                    Calculate Total
+                </button>
+            </div>
+
+            <div id="calculation-result">
+                <h3>Total Cost: $0.00</h3>
+            </div>
+        </section>
+
+        <section id="match-section">
+    <h2>Find My Match</h2>
+    <p>Choose a category and maximum price to find skills that fit your needs.</p>
+
+    <div class="match-form">
+        <label for="match-category">Category Preference:</label>
+        <select id="match-category">
+            <option value="Programming">Programming</option>
+            <option value="Music">Music</option>
+            <option value="Career">Career</option>
+        </select>
+
+        <label for="match-max-price">Maximum Price ($):</label>
+        <input
+            type="number"
+            id="match-max-price"
+            min="0"
+            step="0.01"
+            placeholder="Enter your budget"
+        >
+
+        <button id="find-match-button" type="button">Find My Match</button>
+    </div>
+
+    <div id="match-results" aria-live="polite"></div>
+</section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Skill Swap</p>
+    </footer>
+</body>
+
+</html>
